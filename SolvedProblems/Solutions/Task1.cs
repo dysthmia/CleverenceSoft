@@ -19,7 +19,8 @@ public class Task1 : ITask1
             else
             {
                 result.Append(currentSymbol);
-                result.Append(count);
+                if (count > 1)
+                    result.Append(count);
 
                 currentSymbol = symbol;
                 count = 1;
@@ -27,7 +28,8 @@ public class Task1 : ITask1
         }
 
         result.Append(currentSymbol);
-        result.Append(count);
+        if (count > 1)
+            result.Append(count);
         
         return result.ToString();
     }
@@ -48,21 +50,20 @@ public class Task1 : ITask1
                 index++;
             }
 
-            if (countStartIndex == index)
-                throw new FormatException("После буквы должно идти число.");
+            var count = 1;
+            if (countStartIndex != index)
+            {
+                var countLength = index - countStartIndex;
+                var countText = input.Substring(countStartIndex, countLength);
 
-            var countLength = index - countStartIndex;
-            var countText = input.Substring(countStartIndex, countLength);
-            
-            if (!int.TryParse(countText, out var count))
-                throw new FormatException("Количество повторений должно быть числом.");
-                
-            if (count <= 0)
-                throw new FormatException("Количество повторений должно быть больше нуля.");
+                if (!int.TryParse(countText, out count))
+                    throw new FormatException("Количество повторений должно быть числом.");
 
+                if (count <= 1)
+                    throw new FormatException("Если количество указано, оно должно быть больше 1.");
+            }
             result.Append(letter, count);
         }
-
         return result.ToString();
     }
 
